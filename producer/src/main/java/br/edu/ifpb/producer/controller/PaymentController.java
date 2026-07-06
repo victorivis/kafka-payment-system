@@ -18,9 +18,4 @@ public class PaymentController {
     public void createOrder(@RequestBody PaymentRecord order) {
         paymentService.sendMessageOrder(order);
     }
-
-    @GetMapping
-    public String debug(){
-        return "Ele está vivo";
-    }
 }
