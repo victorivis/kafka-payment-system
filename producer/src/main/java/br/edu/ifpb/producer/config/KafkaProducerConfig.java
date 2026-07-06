@@ -1,6 +1,5 @@
 package br.edu.ifpb.producer.config;
 
-import br.edu.ifpb.producer.record.PaymentRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +9,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+
+import br.edu.ifpb.producer.entity.PaymentEntity;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class KafkaProducerConfig {
         private String bootstrapAddress;
 
         @Bean
-        public ProducerFactory<String, PaymentRecord> paymentProducerFactory() {
+        public ProducerFactory<String, PaymentEntity> paymentProducerFactory() {
                 Map<String, Object> props = new HashMap<>();
                 props.put(JacksonJsonSerializer.ADD_TYPE_INFO_HEADERS, false);
                 props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -31,7 +32,7 @@ public class KafkaProducerConfig {
         }
 
         @Bean
-        public KafkaTemplate<String, PaymentRecord> paymentKafkaTemplate() {
+        public KafkaTemplate<String, PaymentEntity> paymentKafkaTemplate() {
                 return new KafkaTemplate<>(paymentProducerFactory());
         }
 }

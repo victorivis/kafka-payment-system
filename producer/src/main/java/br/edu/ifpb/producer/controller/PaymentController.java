@@ -1,6 +1,6 @@
 package br.edu.ifpb.producer.controller;
 
-import br.edu.ifpb.producer.record.PaymentRecord;
+import br.edu.ifpb.producer.dto.PaymentRequest;
 import br.edu.ifpb.producer.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ public class PaymentController {
     }
    
     @PostMapping
-    public void createOrder(@RequestBody PaymentRecord order) {
+    public void createOrder(@RequestBody PaymentRequest order) {
         paymentService.sendMessageOrder(order);
     }
 }
