@@ -33,3 +33,19 @@ services:
             local:
               properties:
                 bootstrap.servers: "kafka:9092"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: payments
+      POSTGRES_PASSWORD: DylanThomasFur1a
+      POSTGRES_DB: payments_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+
+volumes:
+  postgres-data:
