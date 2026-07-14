@@ -5,5 +5,14 @@ spring:
   kafka:
     bootstrap-servers: localhost:9094
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payments_db
+    username: payments
+    password: DylanThomasFur1a
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
 server:
   port: 8083
