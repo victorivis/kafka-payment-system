@@ -15,12 +15,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
-	private String name;
-	private Integer value;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String name;
+    private Integer value;
 
-	@Enumerated(EnumType.STRING)
-	private PaymentStatus status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
 }

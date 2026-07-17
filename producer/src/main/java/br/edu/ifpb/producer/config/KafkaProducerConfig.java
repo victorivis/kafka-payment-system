@@ -17,21 +17,21 @@ import java.util.HashMap;
 @Configuration
 public class KafkaProducerConfig {
 
-        @Value(value = "${spring.kafka.bootstrap-servers}")
-        private String bootstrapAddress;
+    @Value(value = "${spring.kafka.bootstrap-servers}")
+    private String bootstrapAddress;
 
-        @Bean
-        public ProducerFactory<String, PaymentCreatedEvent> paymentProducerFactory() {
-                Map<String, Object> props = new HashMap<>();
-                props.put(JacksonJsonSerializer.ADD_TYPE_INFO_HEADERS, false);
-                props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-                props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-                props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
-                return new DefaultKafkaProducerFactory<>(props);
-        }
+    @Bean
+    public ProducerFactory<String, PaymentCreatedEvent> paymentProducerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(JacksonJsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
 
-        @Bean
-        public KafkaTemplate<String, PaymentCreatedEvent> paymentKafkaTemplate() {
-                return new KafkaTemplate<>(paymentProducerFactory());
-        }
+    @Bean
+    public KafkaTemplate<String, PaymentCreatedEvent> paymentKafkaTemplate() {
+        return new KafkaTemplate<>(paymentProducerFactory());
+    }
 }

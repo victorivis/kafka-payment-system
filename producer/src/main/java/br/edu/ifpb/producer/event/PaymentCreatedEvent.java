@@ -6,4 +6,5 @@ public record PaymentCreatedEvent(
         UUID id,
         String name,
         Integer value
-) {}
+) {
+}

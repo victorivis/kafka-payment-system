@@ -1,13 +1,12 @@
 package br.edu.ifpb.producer.mapper;
 
 import br.edu.ifpb.producer.dto.PaymentRequest;
+import br.edu.ifpb.producer.dto.PaymentResponse;
 import br.edu.ifpb.producer.entity.PaymentEntity;
 
 import br.edu.ifpb.producer.entity.PaymentStatus;
 import br.edu.ifpb.producer.event.PaymentCreatedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class PaymentMapper {
@@ -25,6 +24,15 @@ public class PaymentMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getValue()
+        );
+    }
+
+    public static PaymentResponse toResponse(PaymentEntity entity) {
+        return new PaymentResponse(
+                entity.getId(),
+                entity.getName(),
+                entity.getValue(),
+                entity.getStatus()
         );
     }
 }
