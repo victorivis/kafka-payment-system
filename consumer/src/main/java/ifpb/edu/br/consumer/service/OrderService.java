@@ -1,5 +1,7 @@
 package ifpb.edu.br.consumer.service;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import ifpb.edu.br.consumer.entity.PaymentEntity;
 import ifpb.edu.br.consumer.entity.PaymentStatus;
 import ifpb.edu.br.consumer.record.PaymentReceivedEvent;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderService {
     PaymentRepository paymentRepository;
+    PaymentGatewayService paymentGatewayService;
 
     @KafkaListener(topics = "payment-topic", containerFactory = "orderKafkaListenerContainerFactory")
     public void orderListener(PaymentReceivedEvent event) {
@@ -28,6 +31,17 @@ public class OrderService {
 
         PaymentEntity payment = optPayment.get();
         payment.setStatus(PaymentStatus.APROVADO);
+
+        try {
+            PaymentIntent intent = paymentGatewayService.charge(payment);
+            payment.setStripePaymentIntentId(intent.getId());
+            payment.setStatus("succeeded".equals(intent.getStatus())
+                    ? PaymentStatus.APROVADO
+                    : PaymentStatus.RECUSADO);
+        } catch (StripeException e) {
+            System.out.println("[Error] Falha ao processar pagamento na Stripe: " + e.getMessage());
+            payment.setStatus(PaymentStatus.RECUSADO);
+        }
 
         paymentRepository.save(payment);
         System.out.println("Payment updated: " + event);

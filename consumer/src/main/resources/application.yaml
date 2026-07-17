@@ -14,5 +14,8 @@ spring:
     hibernate:
       ddl-auto: update
 
+stripe:
+  api-key: ${STRIPE_SECRET_KEY}
+
 server:
   port: 8085

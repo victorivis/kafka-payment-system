@@ -23,4 +23,6 @@ public class PaymentEntity {
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
+    private String stripePaymentIntentId;
 }
