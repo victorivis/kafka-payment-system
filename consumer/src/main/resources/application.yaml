@@ -17,5 +17,8 @@ spring:
 stripe:
   api-key: ${STRIPE_SECRET_KEY}
 
+consumer:
+  processing-delay-ms: 9000
+
 server:
   port: 8085

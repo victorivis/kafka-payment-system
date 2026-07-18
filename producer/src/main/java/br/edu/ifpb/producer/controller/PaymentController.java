@@ -42,4 +42,12 @@ public class PaymentController {
                 .map(PaymentMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<PaymentResponse> cancelPayment(@PathVariable UUID id) {
+        return paymentService.cancel(id)
+                .map(PaymentMapper::toResponse)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+    }
 }

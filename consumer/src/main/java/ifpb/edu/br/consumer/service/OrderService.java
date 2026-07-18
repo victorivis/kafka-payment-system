@@ -6,30 +6,51 @@ import ifpb.edu.br.consumer.entity.PaymentEntity;
 import ifpb.edu.br.consumer.entity.PaymentStatus;
 import ifpb.edu.br.consumer.record.PaymentReceivedEvent;
 import ifpb.edu.br.consumer.repository.PaymentRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrderService {
-    PaymentRepository paymentRepository;
-    PaymentGatewayService paymentGatewayService;
+    private final PaymentRepository paymentRepository;
+    private final PaymentGatewayService paymentGatewayService;
+
+    @Value("${consumer.processing-delay-ms:0}")
+    private long processingDelayMs;
 
     @KafkaListener(topics = "payment-topic", containerFactory = "orderKafkaListenerContainerFactory")
-    public void orderListener(PaymentReceivedEvent event) {
-        System.out.println("Received Message Consumer: " + event);
+    public void orderListener(PaymentReceivedEvent event) throws InterruptedException {
+        log.info("Received event on consumer: {}", event);
+
+        if (processingDelayMs > 0) {
+            log.info("Waiting {} ms before processing (cancellation window)...", processingDelayMs);
+            Thread.sleep(processingDelayMs);
+        }
 
         Optional<PaymentEntity> optPayment = paymentRepository.findById(event.id());
 
         if (optPayment.isEmpty()) {
-            System.out.println("[Error]: Payment not found for message id: " + event.id());
+            log.error("Payment not found for message id: {}", event.id());
             return;
         }
 
         PaymentEntity payment = optPayment.get();
+
+        if (payment.getStatus() != PaymentStatus.PENDENTE) {
+            log.warn(
+                    "Payment {} is no longer in PENDING status (current status: {}). Processing aborted.",
+                    payment.getId(),
+                    payment.getStatus()
+            );
+            return;
+        }
+
         payment.setStatus(PaymentStatus.APROVADO);
 
         try {
@@ -39,11 +60,11 @@ public class OrderService {
                     ? PaymentStatus.APROVADO
                     : PaymentStatus.RECUSADO);
         } catch (StripeException e) {
-            System.out.println("[Error] Falha ao processar pagamento na Stripe: " + e.getMessage());
+            log.error("Failed to process payment with Stripe.", e);
             payment.setStatus(PaymentStatus.RECUSADO);
         }
 
         paymentRepository.save(payment);
-        System.out.println("Payment updated: " + event);
+        log.info("Payment successfully updated: {}", payment);
     }
 }
