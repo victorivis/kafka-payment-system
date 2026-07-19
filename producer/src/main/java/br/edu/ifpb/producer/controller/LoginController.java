@@ -6,6 +6,7 @@ import br.edu.ifpb.producer.entity.UserEntity;
 import br.edu.ifpb.producer.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/login")
+@Tag(name = "Autenticação", description = "Login e emissão de token JWT")
 public class LoginController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;

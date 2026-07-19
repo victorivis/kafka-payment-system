@@ -45,8 +45,6 @@ public class UserService {
         UserEntity user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.addPermission(PermissionEntity.builder().name("ROLE_USER").build());
-
         userRepository.save(user);
 
         return UserMapper.toResponse(user);

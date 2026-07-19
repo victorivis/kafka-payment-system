@@ -38,7 +38,7 @@ public class PaymentController {
 
     @Operation(summary = "Consultar o status de um pagamento pelo id")
     @ApiResponse(responseCode = "200", description = "Pagamento encontrado")
-    @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
+    @ApiResponse(responseCode = "403", description = "Pagamento não existe ou não pertence ao usuário autenticado")
     @GetMapping("/{id}")
     public ResponseEntity<PaymentResponse> getStatus(@PathVariable UUID id) {
         return paymentService.findById(id)
@@ -57,13 +57,13 @@ public class PaymentController {
 
     @Operation(
             summary = "Cancelar um pagamento",
-            description = "Só é permitido enquanto o pagamento ainda está PENDENTE, ou seja, "
-                    + "antes do consumer processá-lo junto ao gateway. Existe um delay para permitir"
-                    + " que o cancelamento aconteça antes do processamento."
-                    + " Se o pagamento já foi processado, o cancelamento não é permitido."
+            description = "Só é permitido enquanto o pagamento ainda está PENDENTE, antes do consumer "
+                    + "processá-lo junto ao gateway. Existe um delay para permitir que o cancelamento "
+                    + "aconteça antes do processamento."
     )
     @ApiResponse(responseCode = "200", description = "Pagamento cancelado com sucesso")
-    @ApiResponse(responseCode = "409", description = "Pagamento não existe ou já não está mais PENDENTE")
+    @ApiResponse(responseCode = "403", description = "Pagamento não existe ou não pertence ao usuário autenticado")
+    @ApiResponse(responseCode = "409", description = "Pagamento já não está mais PENDENTE")
     @PatchMapping("/{id}")
     public ResponseEntity<PaymentResponse> cancelPayment(@PathVariable UUID id) {
         return paymentService.cancel(id)

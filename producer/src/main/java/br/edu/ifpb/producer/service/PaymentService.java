@@ -43,13 +43,14 @@ public class PaymentService {
     }
 
     public Optional<PaymentEntity> cancel(UUID id) {
-        Optional<PaymentEntity> optPayment = paymentRepository.findById(id);
+        UserEntity user = userService.getCurrentUser();
 
-        if (optPayment.isEmpty()) {
-            return Optional.empty();
+        if (!paymentRepository.existsByIdAndUser(id, user)) {
+            throw new UnautorizedException();
         }
 
-        PaymentEntity payment = optPayment.get();
+        PaymentEntity payment = paymentRepository.findById(id)
+                .orElseThrow(UnautorizedException::new);
 
         if (payment.getStatus() != PaymentStatus.PENDENTE) {
             return Optional.empty();
@@ -60,7 +61,7 @@ public class PaymentService {
     }
 
     public Optional<PaymentEntity> findById(UUID id) {
-        if(!paymentRepository.existsByIdAndUser(id, userService.getCurrentUser())){
+        if (!paymentRepository.existsByIdAndUser(id, userService.getCurrentUser())) {
             throw new UnautorizedException();
         }
 
@@ -68,8 +69,6 @@ public class PaymentService {
     }
 
     public List<PaymentEntity> findCurrent() {
-
-
         UserEntity user = userService.getCurrentUser();
         return paymentRepository.findByUser(user);
     }
