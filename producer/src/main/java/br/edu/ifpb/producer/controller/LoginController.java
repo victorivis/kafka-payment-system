@@ -4,6 +4,8 @@ import br.edu.ifpb.producer.dto.LoginRequest;
 import br.edu.ifpb.producer.entity.PermissionEntity;
 import br.edu.ifpb.producer.entity.UserEntity;
 import br.edu.ifpb.producer.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,6 +31,13 @@ public class LoginController {
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
+    @Operation(
+            summary = "Autenticar usuário",
+            description = "Valida email e senha e retorna um token JWT (válido por 10 minutos) "
+                    + "a ser enviado no header Authorization como 'Bearer {token}' nas demais rotas."
+    )
+    @ApiResponse(responseCode = "200", description = "Login realizado, token emitido")
+    @ApiResponse(responseCode = "401", description = "Email ou senha inválidos")
     @PostMapping
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         Optional<UserEntity> optUser = userService.findByEmail(loginRequest.getEmail());
