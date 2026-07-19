@@ -60,7 +60,7 @@ public class OrderService {
                     ? PaymentStatus.APROVADO
                     : PaymentStatus.RECUSADO);
         } catch (StripeException e) {
-            log.error("Failed to process payment with Stripe.", e);
+            log.error("Failed to process payment with Stripe. {}", e.getMessage());
             payment.setStatus(PaymentStatus.RECUSADO);
         }
 

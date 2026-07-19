@@ -1,13 +1,10 @@
-package br.edu.ifpb.producer.entity;
+package ifpb.edu.br.consumer.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -24,14 +21,6 @@ public class UserEntity {
 
     @Column(nullable = false, unique = true)
     private String email;
-    private String password;
+
     private PaymentMethod paymentMethod;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<PermissionEntity> permissions = new ArrayList<>();
-
-    public void addPermission(PermissionEntity permissionEntity) {
-        this.permissions.add(permissionEntity);
-        permissionEntity.setUser(this);
-    }
 }

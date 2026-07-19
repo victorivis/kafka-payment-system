@@ -15,6 +15,7 @@ public class UserMapper {
         UserEntity entity = new UserEntity();
         entity.setName(request.getName());
         entity.setEmail(request.getEmail());
+        entity.setPaymentMethod(request.getPaymentMethod());
         return entity;
     }
 

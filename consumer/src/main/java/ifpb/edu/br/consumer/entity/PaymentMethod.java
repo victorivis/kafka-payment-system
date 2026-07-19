@@ -1,4 +1,4 @@
-package br.edu.ifpb.producer.entity;
+package ifpb.edu.br.consumer.entity;
 
 import lombok.Getter;
 

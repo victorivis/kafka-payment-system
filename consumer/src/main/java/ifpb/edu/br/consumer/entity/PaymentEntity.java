@@ -18,13 +18,15 @@ public class PaymentEntity {
 
     @Id
     private UUID id;
-
     private String name;
-
     private Integer value;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
     private String stripePaymentIntentId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }
