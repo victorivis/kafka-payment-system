@@ -4,6 +4,7 @@ import br.edu.ifpb.producer.dto.UserRequest;
 import br.edu.ifpb.producer.dto.UserResponse;
 import br.edu.ifpb.producer.entity.PermissionEntity;
 import br.edu.ifpb.producer.entity.UserEntity;
+import br.edu.ifpb.producer.exception.EmailAlreadyExistsException;
 import br.edu.ifpb.producer.mapper.UserMapper;
 import br.edu.ifpb.producer.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,10 @@ public class UserService {
     }
 
     public UserResponse register(UserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
+
         UserEntity user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
