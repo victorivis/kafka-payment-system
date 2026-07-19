@@ -1,0 +1,266 @@
+{
+  "info": {
+    "_postman_id": "386c9d6c-e665-4d05-88ea-a3ceb718ad6e",
+    "name": "Kafka",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54324265",
+    "_collection_link": "https://go.postman.co/collection/54324265-386c9d6c-e665-4d05-88ea-a3ceb718ad6e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "pagamento",
+      "item": [
+        {
+          "name": "Criar Pagamento",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"assinatura mensal (netflix anuncio)\",\r\n    \"value\": 200\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/payment",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "payment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/payment",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "payment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Status",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Stripe\",\r\n    \"description\": \"primeiro pagamento\",\r\n    \"amount\": 42\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/payment/bbfda9d6-780e-4371-d467-38c64536b2d3",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "payment",
+                "bbfda9d6-780e-4371-d467-38c64536b2d3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Pagamento",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"consumir\",\r\n    \"value\": 4200\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/payment/bbfda9d6-780e-4371-b435-39c64536b2d1",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "payment",
+                "bbfda9d6-780e-4371-b435-39c64536b2d1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "usuario",
+      "item": [
+        {
+          "name": "login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"zorba@gmail.com\",\r\n    \"password\": \"azx12\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "registra usuario com cartao valido",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"AlexisZorba\",\r\n    \"emal\": \"zorba@gmail.com\",\r\n    \"password\": \"azx12\",\r\n    \"paymentMethod\": \"VISA\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/user",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register usuario com cartao invalido",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"DickVigarista\",\r\n    \"email\": \"dick@gmail.com\",\r\n    \"password\": \"azx12\",\r\n    \"paymentMethod\": \"DECLINED_INSUFFICIENT_FUNDS\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/user",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "me",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/payment/f8242472-83a0-400e-a7eb-d3afd21cac69",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "payment",
+                "f8242472-83a0-400e-a7eb-d3afd21cac69"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
