@@ -49,7 +49,7 @@ Certifique-se de que essas portas estejam livres na sua máquina antes de subir.
 
 ## 2. Rodar o producer e o consumer
 
-O consumer precisa de uma chave de API do Stripe (modo teste) exportada como variável de ambiente antes de subir:
+O consumer precisa de uma chave de API do Stripe exportada como variável de ambiente antes de subir:
 
 ```bash
 export STRIPE_SECRET_KEY="<chave__sk_test_xxx>"
@@ -59,6 +59,8 @@ Ou em um ambiente windows
 ```powershell
 setx STRIPE_SECRET_KEY "<chave__sk_test_xxx>"
 ```
+
+IMPORTANTE: no application.yml o consumer está com ddl-auto em modo de update e o consumer está em modo de validate. Na primeira execução é necessário abrir primeiro o consumer para que ele crie o banco de dados.
 
 Em dois terminais separados, um dentro de cada pasta de módulo:
 
@@ -77,13 +79,15 @@ cd consumer
 
 O consumer aguarda `9000ms` (configurável em `consumer.processing-delay-ms`, no `application.yaml`) antes de processar cada pagamento, para dar tempo de o cliente cancelar via API antes da cobrança ser efetivada no Stripe.
 
-## 3. Endpoints - Documentação interativa (Swagger)
+## 3. Endpoints
 
 Com o producer rodando, a documentação das rotas OpenAPI/Swagger fica disponível em:
 
 ```
 http://localhost:8083/swagger-ui/index.html
 ```
+
+Para testar rapidamente esses endpoints dentro de /data, está um json que pode ser importado no Postman.
 
 ## 4. Debugar o banco rapidamente
 
