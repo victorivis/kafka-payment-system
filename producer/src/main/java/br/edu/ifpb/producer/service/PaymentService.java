@@ -4,7 +4,9 @@ import br.edu.ifpb.producer.dto.PaymentRequest;
 import br.edu.ifpb.producer.dto.PaymentResponse;
 import br.edu.ifpb.producer.entity.PaymentEntity;
 import br.edu.ifpb.producer.entity.PaymentStatus;
+import br.edu.ifpb.producer.entity.UserEntity;
 import br.edu.ifpb.producer.event.PaymentCreatedEvent;
+import br.edu.ifpb.producer.exception.UnautorizedException;
 import br.edu.ifpb.producer.mapper.PaymentMapper;
 
 import br.edu.ifpb.producer.repository.PaymentRepository;
@@ -23,10 +25,13 @@ public class PaymentService {
 
     private final KafkaTemplate<String, PaymentCreatedEvent> paymentKafkaTemplate;
     private final PaymentRepository paymentRepository;
+    private final UserService userService;
 
     @SuppressWarnings("null")
     public PaymentResponse sendMessageOrder(PaymentRequest order) {
         PaymentEntity payment = PaymentMapper.toEntity(order);
+        payment.setUser(userService.getCurrentUser());
+
         payment = paymentRepository.save(payment);
 
         String key = payment.getId().toString();
@@ -55,10 +60,17 @@ public class PaymentService {
     }
 
     public Optional<PaymentEntity> findById(UUID id) {
+        if(!paymentRepository.existsByIdAndUser(id, userService.getCurrentUser())){
+            throw new UnautorizedException();
+        }
+
         return paymentRepository.findById(id);
     }
 
-    public List<PaymentEntity> findAll() {
-        return paymentRepository.findAll();
+    public List<PaymentEntity> findCurrent() {
+
+
+        UserEntity user = userService.getCurrentUser();
+        return paymentRepository.findByUser(user);
     }
 }

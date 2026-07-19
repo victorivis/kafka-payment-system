@@ -20,6 +20,14 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(UnautorizedException.class)
+    public ResponseEntity<ApiError> handleUnautorized(
+            UnautorizedException ex,
+            HttpServletRequest request
+    ) {
+        return build(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
     private ResponseEntity<ApiError> build(
             HttpStatus status,
             String message,

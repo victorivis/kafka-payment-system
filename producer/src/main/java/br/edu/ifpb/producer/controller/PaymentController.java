@@ -50,7 +50,7 @@ public class PaymentController {
     @Operation(summary = "Listar o histórico de pagamentos realizados")
     @GetMapping
     public List<PaymentResponse> getHistory() {
-        return paymentService.findAll().stream()
+        return paymentService.findCurrent().stream()
                 .map(PaymentMapper::toResponse)
                 .collect(Collectors.toList());
     }
